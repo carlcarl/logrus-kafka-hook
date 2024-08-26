@@ -20,10 +20,9 @@ type Hook struct {
 //
 // Defaults:
 //
-//		Formatter: *logrus.TextFormatter*
-//		Levels: *logrus.AllLevels*
-//		Topic: *"logs"*
-//
+//	Formatter: *logrus.TextFormatter*
+//	Levels: *logrus.AllLevels*
+//	Topic: *"logs"*
 func New() *Hook {
 	return &Hook{
 		formatter: new(logrus.TextFormatter),
@@ -75,13 +74,18 @@ func (h *Hook) Levels() []logrus.Level {
 
 // Fire writes the entry as a message on Kafka.
 func (h *Hook) Fire(entry *logrus.Entry) error {
-	var key sarama.Encoder
+	/*
+		var key sarama.Encoder
 
-	if t, err := entry.Time.MarshalBinary(); err == nil {
-		key = sarama.ByteEncoder(t)
-	} else {
-		key = sarama.StringEncoder(entry.Level.String())
-	}
+		if t, err := entry.Time.MarshalBinary(); err == nil {
+			key = sarama.ByteEncoder(t)
+		} else {
+			key = sarama.StringEncoder(entry.Level.String())
+		}
+	*/
+
+	// Use empty key instead
+	key := sarama.StringEncoder("")
 
 	msg, err := h.formatter.Format(entry)
 	if err != nil {
