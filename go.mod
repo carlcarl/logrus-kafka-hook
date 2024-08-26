@@ -1,4 +1,4 @@
-module github.com/kenjones-cisco/logrus-kafka-hook
+module github.com/carlcarl/logrus-kafka-hook
 
 go 1.18
 
