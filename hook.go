@@ -84,9 +84,6 @@ func (h *Hook) Fire(entry *logrus.Entry) error {
 		}
 	*/
 
-	// Use empty key instead
-	key := sarama.StringEncoder("")
-
 	msg, err := h.formatter.Format(entry)
 	if err != nil {
 		return fmt.Errorf("%w", err)
@@ -97,8 +94,8 @@ func (h *Hook) Fire(entry *logrus.Entry) error {
 	}
 
 	h.producer.Input() <- &sarama.ProducerMessage{
+		// Use empty key instead
 		Topic: h.topic,
-		Key:   key,
 		Value: sarama.ByteEncoder(msg),
 	}
 
