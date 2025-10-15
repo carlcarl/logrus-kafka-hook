@@ -14,11 +14,15 @@ const flushFrequency = 500 * time.Millisecond
 var ErrNoProducer = errors.New("no producer defined")
 
 // SimpleProducer accepts a minimal set of configurations and creates an AsyncProducer.
-func SimpleProducer(brokers []string, compression sarama.CompressionCodec, ack sarama.RequiredAcks, tlscfg *tls.Config) (sarama.AsyncProducer, error) {
+func SimpleProducer(brokers []string, compression sarama.CompressionCodec, ack sarama.RequiredAcks, channelBufferSize *int, tlscfg *tls.Config) (sarama.AsyncProducer, error) {
 	cfg := sarama.NewConfig()
 	cfg.Producer.RequiredAcks = ack
 	cfg.Producer.Compression = compression
 	cfg.Producer.Flush.Frequency = flushFrequency
+
+	if channelBufferSize != nil {
+		cfg.ChannelBufferSize = *channelBufferSize
+	}
 
 	if tlscfg != nil {
 		cfg.Net.TLS.Enable = true
